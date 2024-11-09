@@ -27,7 +27,12 @@ const uint8_t segment_map[10] = {
     0b01111111, // 8
     0b01101111  // 9  
 };
-
+uint16_t readADC(uint8_t channel) {
+    ADC1->SQR3 = channel;  // Select the channel
+    ADC1->CR2 |= ADC_CR2_SWSTART;  // Start the conversion
+    while (!(ADC1->SR & ADC_SR_EOC));  // Wait for conversion to complete
+    return ADC1->DR;  // Return the result
+}
 void display2(int digit) {
     uint8_t segments = segment_map[digit];
 
